@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="\">
+    <!--课堂示例-->
+        <!--trim标签-->
+            <!--修改mapper_6的updateEmployeeByUsername，功能相同-->
+    <update id="updateEmployeeByUsername1" parameterType="cnd.EmployeeCnd">
+          <!--prefix表示前固定部分-->
+          <!--suffix表示后固定部分-->
+        <trim prefix="update employee" suffix="where username=#{username}">
+            <set>
+                <if test="password!=null">
+                    password=#{password},
+                </if>
+                <if test="sex!=0">
+                    sex=#{sex}
+                </if>
+            </set>
+        </trim>
+    </update>
+
+        <!--foreach标签示例-->
+    <select id="findSelectEmployees" resultMap="employee" parameterType="ArrayList">
+        select * from employee where username in
+            <!--collection指定数据循环来源-->
+            <!--item指定循环变量-->
+            <!--index指定循环序号变量-->
+            <!--open，close指定循环开始以及结尾固定sql语句-->
+            <!--separator指定元素分隔符-->
+        <foreach collection="list" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--课堂作业-->
+        <!--第一题-->
+    <update id="updateStudentByCnd" parameterType="cnd.StudentCnd">
+        UPDATE frame_test.student SET
+        <if test="no!=null">
+            no=#{no}
+        </if>
+        <if test="sex!=3">
+            sex=#{sex}
+        </if>
+        <if test="classno!=null">
+            classno=#{classno}
+        </if>
+        WHERE name = #{name}
+    </update>
+        <!--第二题-->
+    <select id="findStudentByCnd" resultMap="student" parameterType="cnd.StudentCnd">
+        SELECT * FROM student
+        <where>
+            <if test="sex!=3">
+                sex=#{sex}
+            </if>
+            <if test="classno!=null">
+                and classno=#{classno}
+            </if>
+        </where>
+    </select>
+        <!--第三题-->
+    <select id="findSelectStudents" resultMap="student" parameterType="ArrayList">
+        select class.classname from student,class where name in
+        <foreach collection="list" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+        and student.classno=class.no
+    </select>
+
+</mapper>

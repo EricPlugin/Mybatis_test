@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="\">
+    <!--课堂示例-->
+
+
+        <!--自定义映射关系-->
+            <!--resultMap标签定义映射-->
+    <select id="findUserByUser" parameterType="bean.User" resultMap="user">
+       SELECT * FROM user where  username=#{username} and password=#{password}
+    </select>
+                <!--column表示数据库列名-->
+                <!--property为自定义实体类中对应的属性-->
+    <resultMap type="bean.User" id="user">
+        <id property="username" column="username"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+            <!--构造函数定义映射-->
+    <select id="findUserByUser1" parameterType="bean.User" resultMap="user1">
+       SELECT * FROM user
+       where  username=#{username}
+       and password=#{password}
+    </select>
+                <!--column表示数据库列名-->
+                <!--第n个<arg/>指定User构造函数中第n个参数-->
+    <resultMap type="bean.User" id="user1">
+        <constructor>
+            <arg column="username" javaType="String" />
+            <arg column="password" javaType="String" />
+        </constructor>
+    </resultMap>
+
+
+        <!-- 联合查询-多对一 -->
+    <select id="findEmployees" resultMap="employee">
+        select emp.username,emp.password,dep.*
+        from employee emp,department dep
+        where emp.deptid=dep.id
+    </select>
+    <resultMap type="bean.Employee" id="employee">
+        <id property="username" column="username"/>
+        <result property="password" column="password"/>
+            <!--使用<association>标签完成实体类属性的映射-->
+        <association property="dept"   javaType="bean.Department">
+            <id property="id" column="id"/>
+            <result property="deptname" column="name" />
+        </association>
+    </resultMap>
+
+
+        <!-- 联合查询-一对多 -->
+    <select id="findDepartments" resultMap="dept">
+		select department.*,employee.username,employee.password
+		from employee,department
+		where employee.deptid=department.id
+	</select>
+    <resultMap type="bean.Department" id="dept">
+        <id property="id" column="id"/>
+        <result property="deptname" column="name"/>
+            <!--使用<collection>标签配置集合数据类型属性的映射关系-->
+        <collection property="employees" javaType="ArrayList" ofType="bean.Employee">
+            <id property="username" column="username"/>
+            <result property="password" column="password"/>
+        </collection>
+    </resultMap>
+
+    <!--课堂作业-->
+        <!--多对一-->
+    <select id="findStudents" resultMap="student">
+        select student.no,student.name,class.no as classno,class.classname
+		from student,class
+		where student.classno=class.no
+    </select>
+    <resultMap type="bean.Student" id="student">
+        <id property="no" column="no"/>
+        <result property="name" column="name"/>
+        <association property="cla"   javaType="bean.Class">
+            <id property="classno" column="classno"/>
+            <result property="classname" column="classname" />
+        </association>
+    </resultMap>
+        <!--一对多-->
+    <select id="findClasses" resultMap="class">
+        select class.no as classno,class.classname,student.no,student.name
+		from student,class
+		where student.classno=class.no
+    </select>
+    <resultMap type="bean.Class" id="class">
+        <id property="classno" column="classno"/>
+        <result property="classname" column="classname"/>
+        <collection property="students" javaType="ArrayList" ofType="bean.Student">
+            <id property="no" column="no"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+</mapper>

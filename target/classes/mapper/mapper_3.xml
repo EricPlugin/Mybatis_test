@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="\">
+    <!--课堂示例-->
+        <!--新增操作-->
+    <insert id="insertUser" parameterType="bean.User" >
+        insert into frame_test.user(username,password) values(#{username},#{password})
+    </insert>
+        <!--修改操作-->
+    <update id="updateUser" parameterType="bean.User">
+        UPDATE frame_test.user SET
+          password=#{password}
+          WHERE username = #{username}
+    </update>
+
+        <!--删除操作-->
+    <delete id="deleteUser" parameterType="String">
+        delete from frame_test.user where username=#{xxx}
+    </delete>
+
+
+    <!--课堂作业-->
+        <!--新增操作-->
+    <insert id="insertStudent" parameterType="bean.Student" >
+        insert into frame_test.student(no,name) values(#{no},#{name})
+    </insert>
+
+        <!--修改操作-->
+    <update id="updateStudent" parameterType="bean.Student">
+        UPDATE frame_test.student SET
+          name=#{name}
+          WHERE no = #{no}
+    </update>
+
+        <!--删除操作-->
+    <delete id="deleteStudent" parameterType="String">
+        delete from frame_test.student where no=#{xxx}
+    </delete>
+</mapper>

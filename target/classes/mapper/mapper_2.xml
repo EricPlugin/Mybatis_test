@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="\">
+<!--课堂示例-->
+    <!--单参数查询-->
+    <select id="findUserByUsername" parameterType="String" resultType="bean.User">
+	    SELECT * FROM frame_test.user where username=#{xxx}
+    </select>
+    <!--多参数查询-->
+        <!--使用map传递参数-->
+    <select id="findUserByMap" parameterType="hashmap" resultType="hashmap">
+        SELECT * FROM frame_test.user where username=#{username} and password=#{password}
+    </select>
+        <!--使用自定义实体类传递参数-->
+    <select id="findUserByUsernameAndPassword" parameterType="bean.User" resultType="bean.User">
+        SELECT * FROM frame_test.user where username=#{username} and password=#{password}
+    </select>
+
+    <!--课堂作业-->
+    <select id="findStudentByClass" parameterType="bean.Student" resultType="bean.Student">
+        SELECT * FROM frame_test.student where no=#{no} and name=#{name}
+    </select>
+</mapper>
